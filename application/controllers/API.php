@@ -80,7 +80,7 @@ public function addToCart_post(){
     $params = json_decode(file_get_contents('php://input'), TRUE);
        $data = array(
         'product_id'=>$params['product_id'],
-        'quantity'=>1     
+        'quantity'=>$params['product_id'] ?$params['product_id']:1   
         // 'quantity'=>$this->input->get_post('quantity')     
     );
         $result = $this->cart_model->addToCart($data);
@@ -121,8 +121,10 @@ public function addToCart_post(){
     }
 
      //delete cart
-   function deleteCart_get(){
-    $id=  $this->get('id');
+   function deleteCart_post(){
+    $params = json_decode(file_get_contents('php://input'), TRUE);
+    $id=  $params['id'];
+    echo $id."asd";
     if($this->session->userData){
      $user=$this->session->userData->data['id'];
      $result = $this->cart_model->deleteCart($id,$user);

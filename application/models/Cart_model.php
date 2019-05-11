@@ -6,7 +6,7 @@
             }
 //create cart
 public function addToCart($data){
-
+// print_r($data);
   $obj = new stdClass();
   if($this->session->userData){
     $user = $this->session->userData->data['id'];
@@ -135,35 +135,35 @@ public function addToCart($data){
   //get cart 
   public function getCart($user){
  $query = $this->db->query("select c.`id`,p.quantity,c.product_id,p.name ,pi.image, p.final_price , p.discount, p.price, (SELECT SUM(c.quantity) AS quantity FROM cart c where c.product_id=p.id and c.user_id=$user) as quantity, c.`user_id`, c.`timestamp` as date FROM `cart` c LEFT JOIN product p ON p.id=c.product_id Left JOIN product_image pi ON pi.product_id=p.id WHERE c.user_id=$user GROUP BY p.id");
- $cart_list = '<ul>';
+//  $cart_list = '<ul>';
 
-foreach($query->result_array() as $key => $row){
-  $cart_list .=<<<CARTSTART
-  <li>
-  <p>
-  <img src="{$row["image"]}" width="90" alt="">
-  {$row["name"]} <button>Edit</button>  <button>Delete</button></p>
-  <p><span>{$row["quantity"]}</span> X {$row["price"]}</p>
-  </li>
-CARTSTART;
+// foreach($query->result_array() as $key => $row){
+//   $cart_list .=<<<CARTSTART
+//   <li>
+//   <p>
+//   <img src="{$row["image"]}" width="90" alt="">
+//   {$row["name"]} <button>Edit</button>  <button>Delete</button></p>
+//   <p><span>{$row["quantity"]}</span> X {$row["price"]}</p>
+//   </li>
+// CARTSTART;
  
-}
- 
-
- 
- $cart_list .= '</ul>';
+// }
+//   $cart_list .= '</ul>';
  $obj = new stdClass();
        $cartquery=$this->db->query("select SUM(quantity) AS TotalItemsInCart FROM cart WHERE user_id=$user")->row();
+       $carttotalquery=$this->db->query("SELECT SUM(c.quantity * p.final_price) AS total FROM cart c LEFT JOIN product p ON c.product_id=p.id where c.product_id=p.id and c.user_id=$user")->row();
+
        if($query->num_rows() > 0){
          $obj->value = true;
         $obj->TotalItemsInCart =$cartquery->TotalItemsInCart;
-        $obj->html = $query->num_rows() > 0?$cart_list:'<h4>Data Not Found</h4>';
+        $obj->CartTotal =$carttotalquery->total;
+        // $obj->html = $query->num_rows() > 0?$cart_list:'<h4>Data Not Found</h4>';
          $obj->data = $query->result_array();
          return $obj ;
        }else{
          $obj->value = false;
          $obj->data = [];
-        
+         $obj->CartTotal =$carttotalquery->total;
          $obj->TotalItemsInCart =$cartquery->TotalItemsInCart;
          $obj->message ="Records not found on your specific input" ;
          return $obj ;
