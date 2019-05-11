@@ -38,34 +38,14 @@ class Product_model extends CI_model{
              $query= $this->db->query($q);
 
         $products_list =  '<ul class="row">';
-// while($row = $query->fetch_assoc()) {
-//     <li class="col-lg-4">
-// <form class="product_form">
-//    <div class="listing-image-box"><img class="img-fluid" src="{$row["image"]}">
-//    <div class="product-listing-buttons">
-//            <input id="{$row["id"]}" name="product_id" type="hidden" value="{$row["id"]}">
-//            <button type="submit"><i class="fa fa-shopping-bag"></i></button>
-//            <button type="submit"><i class="fa fa-exchange"></i></button>
-//            <button type="submit"><i class="fa fa-heart"></i></button>
-//            <button type="submit"><i class="fa fa-eye"></i></button>
-//        </div>
-//        </div>
-   
-//    <span class="stock-available">Stock:{$row["quantity"]}</span>
-//    <h4>{$row["name"]}</h4>
-//    <span class="price-listing"><span class="offer-price">{$currency} {$row["price"]}</span>{$currency} {$row["final_price"]}</span> 
-//    <div class="listing-price-box">
-//   </div>
-// </form>
-// </li>
     foreach ($query->result_array() as $key => $row) {
 $products_list .= <<<EOT
-<li class="col-lg-4">
+<li class="col-lg-4 product_form">
 
 <a href="details.php?name={$row['name']}"> <div class="listing-image-box"><img class="img-fluid" src="{$row["image"]}"></a>
    <div class="product-listing-buttons">
            <input id="{$row["id"]}" name="product_id" type="hidden" value="{$row["id"]}">
-           <button type="submit"><i class="fa fa-shopping-bag"></i></button>
+           <button id="{$row["id"]}" onclick="addToCart(event)"><i class="fa fa-shopping-bag"></i></button>
            <button type="submit"><i class="fa fa-exchange"></i></button>
            <button type="submit"><i class="fa fa-heart"></i></button>
            <button type="submit"><i class="fa fa-eye"></i></button>
@@ -74,7 +54,7 @@ $products_list .= <<<EOT
    
    <span class="stock-available">Stock:{$row["quantity"]}</span>
    <h4><a href="details.php?name={$row['name']}">{$row["name"]}</a></h4>
-   <button id="{$row["id"]}" onclick="addToCart(event)">Add To Cart</button>
+  
    <span class="price-listing"><span class="offer-price">{$currency} {$row["price"]}</span>{$currency} {$row["final_price"]}</span> 
    <div class="listing-price-box">
   </div>
