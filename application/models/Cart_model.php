@@ -6,7 +6,7 @@
             }
 //create cart
 public function addToCart($data){
-// print_r($data);
+ print_r($data);
   $obj = new stdClass();
   if($this->session->userData){
     $user = $this->session->userData->data['id'];
@@ -178,7 +178,7 @@ public function addToCart($data){
     $obj->value = true;
     $obj->TotalItemsInCart = array_sum(array_column($this->session->cartData,'quantity'));
     $obj->data = $this->session->cartData;
-    return $obj ;
+    return $obj;
      }else{
        $obj->value = false;
        $obj->data = [];

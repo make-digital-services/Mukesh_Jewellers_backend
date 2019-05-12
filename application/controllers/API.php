@@ -80,7 +80,7 @@ public function addToCart_post(){
     $params = json_decode(file_get_contents('php://input'), TRUE);
        $data = array(
         'product_id'=>$params['product_id'],
-        'quantity'=>$params['product_id'] ?$params['product_id']:1   
+        'quantity'=>$params['quantity'] ?$params['quantity']:1   
         // 'quantity'=>$this->input->get_post('quantity')     
     );
         $result = $this->cart_model->addToCart($data);
@@ -149,8 +149,78 @@ public function addToCart_post(){
         $obj->message="Please Login to continue";
         $this->response($obj, 200); 
         }
-       
+      }
+
+
+
+        #------------------------------ Order Start ------------------------# 
+   //submit order
+   function submitOrder_post(){
+    $params = json_decode(file_get_contents('php://input'), TRUE);
+    $data = array(
+        'user_id'=>$this->session->userData->data['id'],
+        'first_name'=>$params['first_name'],
+        'last_name'=>$params['last_name'],
+        'email'=>$params['email'],
+        'billing_name'=>$params['billing_name'],
+        'billing_address'=>$params['billing_address'],
+        'billing_contact'=>$params['billing_contact'],
+        'billing_city'=>$params['billing_city'],
+        'billing_state'=>$params['billing_state'],
+        'billing_pincode'=>$params['billing_pincode'],
+        'billing_country'=>$params['billing_country'],
+        'shipping_city'=>$params['shipping_city'],
+        'shipping_address'=>$params['shipping_address'],
+        'shipping_name'=>$params['shipping_name'],
+        'shipping_country'=>$params['shipping_country'],
+        'shipping_contact'=>$params['shipping_contact'],
+        'shipping_state'=>$params['shipping_state'],
+        'shipping_pincode'=>$params['shipping_pincode'],
+        'tracking_code'=>$params['tracking_code'],
+        'default_currency'=>$params['default_currency'],
+        'shipping_method'=>$params['shipping_method'],
+        'orderstatus'=>$params['orderstatus'],
+        'paymentmode'=>$params['paymentmode'],
+        'transaction_id'=>$params['transaction_id']  
+    );
+    $obj = new stdClass();
+    // if($this->session->userData){
+    $result = $this->order_model->submitOrder($data);
+    $this->response($result, 200); 
+    // }else{
+    // $obj->value=false;
+    // $obj->message="Please Login to continue";
+    // $this->response($obj, 200); 
+    // }
+   }
+
+   //get orders based on user_id
+function getOrderbyUserId_get(){
+    $user_id=$this->session->userData->data['id'];
+    $obj = new stdClass();
+    if($this->session->userData){
+    $result=$this->order_model->getOrderbyUserId($user_id);
+    $this->response($result,200);
+    }else{
+    $obj->value=false;
+    $obj->message="Please Login to continue";
+    $this->response($obj, 200); 
     }
+   
+}
+//get orders based on id
+function getOrderbyId_get(){
+    $id=$this->get('id');
+    $result=$this->order_model->getOrderbyId($id);
+    $this->response($result,200);
+}
+//delete orders based on Id(PK)
+function deleteOrder_get(){
+    $id=  $this->get('id');
+    $result = $this->order_model->deleteOrder($id);
+    $this->response($result, 200); 
+    }
+  #------------------------------ Order End -------------------------------#   
 
 
 }
