@@ -67,6 +67,12 @@ class Api extends REST_Controller{
     }
 
 
+    function getContent_get(){
+        $name=  $this->get('name');
+        $result = $this->home_model->getContent($name);
+        $this->response($result, 200);  
+    }
+
 #------------------------------ Navigation Start ----------------------------# 
 function getNavigation_get(){
     $result = $this->home_model->getNavigation();
