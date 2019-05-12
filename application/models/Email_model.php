@@ -7,27 +7,27 @@ class email_model extends CI_Model
   {
     
         $query=$this->db->query("SELECT * FROM `email`")->row();
-        $username=$query->username;
+             $username=$query->user;
         $password=$query->password;
         $url = 'https://api.sendgrid.com/';
       
-				// $json_string = array(
-				
-				// 	'to' => array(
-				// 		'qualitygoldindia@gmail.com','shreeyantra2019@gmail.com'
-				// 	),
-				// 	'category' => 'test_category'
-				// );
+        $json_string = array(
+
+          'to' => array(
+            'makedigitaldesigners@gmail.com', 'makedigitalin@gmail.com'
+          ),
+          'category' => 'test_category'
+        );
         $params = array(
             'api_user'  => $username,
             'api_key'   => $password,
-						// 'x-smtpapi' => json_encode($json_string),
+						'x-smtpapi' => json_encode($json_string),
             'to'        => $toemail,
             'subject'   => $subject,
             'html'      => $htmltext,
-            'text'      => 'Shree Yantra',
-            'from'      => 'info@shreeyntraindia.com',
-            'fromname'      => 'Shree Yantra',
+            'text'      => 'Mukesh Jewellers',
+            'from'      => 'info@mukeshjewellers.in',
+            'fromname'      => 'Mukesh Jewellers',
           );
 
           $request =  $url.'api/mail.send.json';

@@ -35,7 +35,7 @@ public function login($username, $password){
    
 }
 
-public function register($firstname,$lastname,$email,$username){
+public function register($name,$email,$username){
   $obj = new stdClass();
   if(trim($name, " ")  && trim($email, " ") && trim($username, " ")){
   if($this->user_model->checkUserEmail($email)->value){
@@ -74,7 +74,7 @@ public function createPassword($id){
     $data = $this->db->query("select * from user where id=$id")->row();
     $sendData['data'] = $data;
     $viewcontent = $this->load->view('emailers/registeruser', $sendData, true);
-    $this->email_model->emailer($viewcontent,'Welcome to ShreeYantra',$data->email,"");
+    $this->email_model->emailer($viewcontent,'Welcome to Mukesh Jewellers',$data->email,"");
     $obj->value = true;
     $obj->message = "User registered successfully!";
     return $obj ;
