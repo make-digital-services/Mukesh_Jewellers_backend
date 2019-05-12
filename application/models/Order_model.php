@@ -185,12 +185,12 @@ public function createOrder($data){
        }
      }
      public function getOrderbyId($id){
-      $query=$this->db->query("select * from  orders where id=$id");
+      $query=$this->db->query("select * from  `order` where id=$id");
       $obj = new stdClass();
      if($query->num_rows() > 0){
        $obj->value = true;
        $obj->data = $query->row();
-      $obj->items = $this->order_model->getOrderItemsbyOrderId($id)->data;
+      $obj->order_items = $this->order_model->getOrderItemsbyOrderId($id)->data;
        return $obj ;
      }else{
        $obj->value = false;
@@ -201,7 +201,7 @@ public function createOrder($data){
    }
 
    public function getOrderItemsbyOrderId($id){
-    $query=$this->db->query("select oi.`id`, oi.`order_id`, oi.`product_id`, p.name_english as name, pi.image_name, oi.`quantity`, oi.`price` from `order_item` oi LEFT JOIN product p ON oi.product_id=p.id LEFT JOIN product_image pi ON pi.product_id=p.id WHERE oi.order_id=$id GROUP BY p.id");
+    $query=$this->db->query("select oi.`id`, oi.`order_id`, oi.`product_id`, p.name, pi.image, oi.`quantity`, oi.`price` from `order_item` oi LEFT JOIN product p ON oi.product_id=p.id LEFT JOIN product_image pi ON pi.product_id=p.id WHERE oi.order_id=$id GROUP BY p.id");
     $obj = new stdClass();
    if($query->num_rows() > 0){
      $obj->value = true;
