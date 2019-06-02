@@ -141,7 +141,6 @@ public function addToCart_post(){
    function deleteCart_post(){
     $params = json_decode(file_get_contents('php://input'), TRUE);
     $id=  $params['id'];
-    echo $id."asd";
     if($this->session->userData){
      $user=$this->session->userData->data['id'];
      $result = $this->cart_model->deleteCart($id,$user);

@@ -6,7 +6,6 @@
             }
 //create cart
 public function addToCart($data){
- print_r($data);
   $obj = new stdClass();
   if($this->session->userData){
     $user = $this->session->userData->data['id'];
@@ -36,10 +35,10 @@ public function addToCart($data){
     }else{
       $pid=$data['product_id'];
       $this->load->helper('string');
-      $productData = $this->db->query("select p.name,pi.image,  p.price , p.discount, p.final_price as price,p.quantity FROM product p Left JOIN product_image pi ON pi.product_id=p.id WHERE p.id=$pid group by p.id")->row();
+      $productData = $this->db->query("select p.name,pi.image,  p.price , p.discount, p.final_price,p.quantity FROM product p Left JOIN product_image pi ON pi.product_id=p.id WHERE p.id=$pid group by p.id")->row();
       $data['price']=$productData->price;
       $data['discount']=$productData->discount;
-      $data['quantity']=$productData->quantity;
+      $data['quantity']=1;
       $data['final_price']=$productData->final_price;
       $data['image']=$productData->image;
       $data['name']=$productData->name;
@@ -149,7 +148,7 @@ public function addToCart($data){
  
 // }
 //   $cart_list .= '</ul>';
- $obj = new stdClass();
+       $obj = new stdClass();
        $cartquery=$this->db->query("select SUM(quantity) AS TotalItemsInCart FROM cart WHERE user_id=$user")->row();
        $carttotalquery=$this->db->query("SELECT SUM(c.quantity * p.final_price) AS total FROM cart c LEFT JOIN product p ON c.product_id=p.id where c.product_id=p.id and c.user_id=$user")->row();
 
@@ -175,8 +174,13 @@ public function addToCart($data){
     public function getGuestUserCart($lang){
     $obj = new stdClass();
     if($this->session->cartData){
+      $total =0;
+      foreach($this->session->cartData as $key => $value){
+       $total =  $total+( $value['quantity'] * $value['final_price']);
+      }
     $obj->value = true;
     $obj->TotalItemsInCart = array_sum(array_column($this->session->cartData,'quantity'));
+    $obj->CartTotal =$total;
     $obj->data = $this->session->cartData;
     return $obj;
      }else{

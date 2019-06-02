@@ -45,7 +45,7 @@ $products_list .= <<<EOT
 <a href="details.php?name={$row['name']}"> <div class="listing-image-box"><img class="img-fluid" src="{$row["image"]}"></a>
    <div class="product-listing-buttons">
            <input id="{$row["id"]}" name="product_id" type="hidden" value="{$row["id"]}">
-           <button id="{$row["id"]}" onclick="addToCart(event)"><i class="fa fa-shopping-bag"></i></button>
+           <button><i id="{$row["id"]}" onclick="addToCart(event)" class="fa fa-shopping-bag"></i></button>
            <button type="submit"><i class="fa fa-exchange"></i></button>
            <button type="submit"><i class="fa fa-heart"></i></button>
            <button type="submit"><i class="fa fa-eye"></i></button>

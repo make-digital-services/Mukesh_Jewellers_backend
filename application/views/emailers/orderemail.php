@@ -25,7 +25,7 @@ elseif($data->paymentmode == 4)
     <table style="width:600px;margin: 0 auto;border:1px solid #f1ecec;">
         <tr>
             <th style="border-bottom: 4px solid #ff8849;padding:15px 3px;">
-                <img width="250p" src="http://shreeyantraindia.com/shreeyantra/assets/images/logo.png" alt=""
+                <img width="250p" src="assets/images/logo1.png" alt=""
                     style="float:left;">
             </th>
         </tr>
@@ -207,53 +207,7 @@ $finalamount= number_format($famt,2);
                     You,<br>Team Shree Yantra India !</p>
             </td>
         </tr>
-        <tr>
-            <td>
-                <div style="background-color:  #ff8849;padding:0px 10px">
-                    <table>
-                        <tr>
-                            <td width="500">
-                                <p
-                                    style="font-family: 'PT Sans', sans-serif;font-size:0.85em;text-align: left;color: #fff;">
-                                    Contact Us:+91 (0) 7744 402345</p>
-                            </td>
-                            <td width="100">
-                                <table>
-                                    <tr>
-                                        <td style="filter:invert(1)">
-                                          <a href="https://www.facebook.com/SwarnaShreeYantra">
-                                                <img  width="25"
-                                                    src="http://shreeyantraindia.com/shreeyantra/assets/images/fb.png"
-                                                    alt=""></a>
-                                        </td>
-                                        <td style="filter:invert(1)">
-                                            <a href="https://twitter.com/shree_yantra?lang=en">
-                                                <img  width="25"
-                                                    src="http://shreeyantraindia.com/shreeyantra/assets/images/twitter.png"
-                                                    alt=""></a>
-                                        </td>
-                                        <td style="filter:invert(1)" >
-                                            <a href="https://www.pinterest.com/pin/355573333063811416">
-                                                <img  width="25"
-                                                    src="http://shreeyantraindia.com/shreeyantra/assets/images/p-interest.png"
-                                                    alt=""></a>
-                                        </td>
-                                        <td style="filter:invert(1)" >
-                                            <a href="https://www.youtube.com/channel/UCq-94wCCoGj-5k1VlRvnteA">
-                                                <img width="25"
-                                                    src="http://shreeyantraindia.com/shreeyantra/assets/images/youtube.png"
-                                                    alt="">
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
-
-
-                </div>
-            </td>
-        </tr>
+      
     </table>
 </body>
 
