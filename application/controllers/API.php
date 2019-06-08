@@ -1,7 +1,15 @@
 <?php
 
 $http_origin = $_SERVER['HTTP_ORIGIN'];
-header("Access-Control-Allow-Origin:  $http_origin");
+// header("Access-Control-Allow-Origin:  $http_origin");
+// array holding allowed Origin domains
+if ($http_origin == "http://192.168.0.35" ||
+    $http_origin == "http://localhost" ||
+    $http_origin == "http://192.168.0.25" ||
+    $http_origin == "http://www.server4.com")
+{
+    header("Access-Control-Allow-Origin: $http_origin");
+}
 // header('Access-Control-Allow-Origin: *');
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header('Access-Control-Allow-Credentials: true');
@@ -44,6 +52,15 @@ class Api extends REST_Controller{
             $this->session->set_userdata('userData', $result);
         }
         $this->response($result, 200);  
+    }
+
+    // change password
+    public function changePassword_post(){
+    $params = json_decode(file_get_contents('php://input'), TRUE);
+    $oldpass = $params['oldpass'];
+    $newpass = $params['newpass'];
+     $result = $this->user_model->changePassword($oldpass,$newpass);
+    $this->response($result, 200); 
     }
 
     function getUserDetails_get(){

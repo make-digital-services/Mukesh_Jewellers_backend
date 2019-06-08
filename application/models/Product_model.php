@@ -39,6 +39,7 @@ class Product_model extends CI_model{
 
         $products_list =  '<ul class="row">';
     foreach ($query->result_array() as $key => $row) {
+        $discountPrice = $row['price']!=$row['final_price']  && $row['price']!=0?$currency.$row["price"]:'';
 $products_list .= <<<EOT
 <li class="col-lg-4 product_form">
 
@@ -54,8 +55,9 @@ $products_list .= <<<EOT
    
    <span class="stock-available">Stock:{$row["quantity"]}</span>
    <h4><a href="details.php?name={$row['name']}">{$row["name"]}</a></h4>
-  
-   <span class="price-listing"><span class="offer-price">{$currency} {$row["price"]}</span>{$currency} {$row["final_price"]}</span> 
+   <span class="price-listing">
+   <span class="offer-price"> {$discountPrice}</span>
+   {$currency} {$row["final_price"]}</span> 
    <div class="listing-price-box">
   </div>
   

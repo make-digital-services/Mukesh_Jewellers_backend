@@ -124,6 +124,7 @@ $obj->value = false;
   
 }
 
+
 public function submitContact($name,$phone,$email,$subject,$message){
   $obj = new stdClass();
   if(trim($name, " ") && trim($phone, " ") && trim($email, " ") && trim($subject, " ") && trim($message, " ")){
@@ -151,6 +152,49 @@ if($query){
     $obj->message ="All fields are mandatory." ;
     return $obj ;
   }
+}
+
+
+public function submitPersonalDetails($id,$fname,$lname,$phone,$email,$billing_address,$billing_country,$billing_city,$billing_state,$billing_pincode,$shipping_address,$shipping_country,$shipping_city,$shipping_state,$shipping_pincode){
+$data=array("firstname" => $fname,"lastname" => $lname,"phone" => $phone,"email" => $email,"billing_address" => $billing_address,"billing_country" => $billing_country,"billing_city" => $billing_city,"billing_state" => $billing_state,"billing_pincode" => $billing_pincode,"shipping_address" => $shipping_address,"shipping_country" => $shipping_country,"shipping_city" => $shipping_city,"shipping_state" => $shipping_state,"shipping_pincode" => $shipping_pincode);
+$this->db->where( "id", $id );
+$query=$this->db->update( "user", $data );
+$obj = new stdClass();
+if($query){
+  $obj->value = true;
+  $obj->message = "record updated";
+  return $obj ;
+}else{
+  $obj->value = false;
+  $obj->message ="Something went wrong, please try again later." ;
+  return $obj ;
+} 
+}
+
+public function changePassword($oldpass, $newpass){
+  $id=$this->session->userData->data['id'];
+  if($this->session->userData->data['accesslevel']==1){
+    $oldpass = $this->db->query("select * from user where password='$oldpass'")->row();
+  }else{
+    $oldpass = $this->db->query("select * from user where password='$oldpass' and id=$id")->row();
+  }
+$obj = new stdClass();
+if($oldpass){
+ $query = $this->db->query("update user set password='$newpass' where id=$id");
+if($query){
+  $obj->value = true;
+  $obj->message ="Password changed successfully!" ;
+  return $obj ;
+}else{
+  $obj->value = false;
+  $obj->message ="Something went wrong, please try again later." ;
+  return $obj ;
+}
+}else{
+  $obj->value = false;
+  $obj->message ="Incorrect old password" ;
+  return $obj ;
+}
 }
 
 }
