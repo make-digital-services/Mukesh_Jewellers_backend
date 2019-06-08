@@ -90,6 +90,52 @@ class Api extends REST_Controller{
         $this->response($result, 200);  
     }
 
+#------------------------------ Wishlist Start ----------------------------# 
+
+function getWatchlist_get(){
+    $result = $this->productwatch_model->getWatchlist();
+    $this->response($result, 200);  
+}
+
+
+function addToWatchlist_post(){
+    $params = json_decode(file_get_contents('php://input'), TRUE);
+    if($this->session->userData){
+    $data = array(
+        'product'=>$params['product_id'],
+        'user'=>$this->session->userData->data['id']     
+    );
+    $result = $this->productwatch_model->addToWatchlist($data);
+    $this->response($result, 200); 
+}else{
+    $obj = new stdClass();
+    $obj->value=false;
+    $obj->message="Please Log in to continue";
+    $this->response($obj, 200); 
+}
+ 
+}
+
+
+//delete cart
+function deleteWatchlist_post(){
+    $params = json_decode(file_get_contents('php://input'), TRUE);
+    $id=  $params['id'];
+    if($this->session->userData){
+     $user=$this->session->userData->data['id'];
+     $result = $this->productwatch_model->deleteWatchlist($id,$user);
+     $this->response($result, 200); 
+    }else{
+        $obj = new stdClass();
+        $obj->value=false;
+        $obj->message="Please Log in to continue";
+        $this->response($obj, 200); 
+    }
+
+ }
+#------------------------------ Wishlist End ----------------------------# 
+
+
 #------------------------------ Navigation Start ----------------------------# 
 function getNavigation_get(){
     $result = $this->home_model->getNavigation();

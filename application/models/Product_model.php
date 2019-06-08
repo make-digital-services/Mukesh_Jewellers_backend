@@ -47,8 +47,8 @@ $products_list .= <<<EOT
    <div class="product-listing-buttons">
            <input id="{$row["id"]}" name="product_id" type="hidden" value="{$row["id"]}">
            <button><i id="{$row["id"]}" onclick="addToCart(event)" class="fa fa-shopping-bag"></i></button>
-           <button type="submit"><i class="fa fa-exchange"></i></button>
-           <button type="submit"><i class="fa fa-heart"></i></button>
+           <button type="submit"><i  class="fa fa-exchange"></i></button>
+           <button type="submit"><i id="{$row["id"]}" onclick="addToWatchlist(event)" class="fa fa-heart"></i></button>
            <button type="submit"><i class="fa fa-eye"></i></button>
        </div>
        </div>
