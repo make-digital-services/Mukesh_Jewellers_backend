@@ -125,13 +125,20 @@ $obj->value = false;
 }
 
 
-public function submitContact($name,$phone,$email,$subject,$message){
+public function submitContact($name,$email,$phone,$subject,$message){
   $obj = new stdClass();
   if(trim($name, " ") && trim($phone, " ") && trim($email, " ") && trim($subject, " ") && trim($message, " ")){
     $this->load->helper('email');
     if (valid_email($email)){
-$query=$this->db->query("insert into contact (`name`, `phone`, `email`, `subject`, `message`) VALUES('$name','$phone','$email','$subject','$message') ");
+// $query=$this->db->query("insert into contact (`name`, `phone`, `email`, `subject`, `message`) VALUES('$name','$phone','$email','$subject','$message') ");
+$data=array("name" => $name,"email" => $email,"phone" => $phone,"subject" => $subject,"message" => $message);
+$query=$this->db->insert( "contact", $data );
 if($query){
+  $id=$this->db->insert_id();
+  $data = $this->db->query("select * from contact where id=$id")->row();
+  $sendData['data'] = $data;
+  $viewcontent = $this->load->view('emailers/enquiry', $sendData, true);
+  $this->email_model->emailer($viewcontent,'New Enquiry - Mukesh Jewellers',"makedigitaldesigners@gmail.com","");
   $obj->value = true;
   $obj->message = "Thank you for getting in touch! We will get back to you shortly.";
   return $obj ;

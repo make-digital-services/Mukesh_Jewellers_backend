@@ -42,6 +42,19 @@ class Api extends REST_Controller{
    }
 
 
+      //contact submit
+      public function submitContact_post(){
+        $params = json_decode(file_get_contents('php://input'), TRUE);
+            $name= $params['name'];
+            $email=$params['email'];     
+            $phone=$params['phone'];       
+            $subject=$params['subject'];       
+            $message=$params['message'];       
+            $result = $this->user_model->submitContact($name,$email,$phone,$subject,$message);
+            $this->response($result, 200);      
+       }
+    
+
     //user login
     function login_post(){
         $params = json_decode(file_get_contents('php://input'), TRUE);
