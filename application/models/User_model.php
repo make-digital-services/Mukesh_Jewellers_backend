@@ -178,6 +178,55 @@ if($query){
 } 
 }
 
+
+public function savePd($id,$name,$email,$phone,$gender){
+  $data=array("name" => $name,"email" => $email,"phone" => $phone,"gender" => $gender);
+  $this->db->where( "id", $id );
+  $query=$this->db->update( "user", $data );
+  $obj = new stdClass();
+  if($query){
+    $obj->value = true;
+    $obj->message = "record updated";
+    return $obj ;
+  }else{
+    $obj->value = false;
+    $obj->message ="Something went wrong, please try again later." ;
+    return $obj ;
+  } 
+}
+
+public function updateBilling($id,$billingaddress,$billingpincode,$billingcity,$billingstate){
+  $data=array("billingaddress" => $billingaddress,"billingcountry" => $billingcountry,"billingcity" => $billingcity,"billingstate" => $billingstate,"billingpincode" => $billingpincode);
+  $this->db->where( "id", $id );
+  $query=$this->db->update( "user", $data );
+  $obj = new stdClass();
+  if($query){
+    $obj->value = true;
+    $obj->message = "record updated";
+    return $obj ;
+  }else{
+    $obj->value = false;
+    $obj->message ="Something went wrong, please try again later." ;
+    return $obj ;
+  } 
+}
+
+public function updateShipping($id,$shippingaddress,$shippingpincode,$shippingcity,$shippingstate){
+  $data=array("shippingaddress" => $shippingaddress,"shippingcountry" => $shippingcountry,"shippingcity" => $shippingcity,"shippingstate" => $shippingstate,"shippingpincode" => $shippingpincode);
+  $this->db->where( "id", $id );
+  $query=$this->db->update( "user", $data );
+  $obj = new stdClass();
+  if($query){
+    $obj->value = true;
+    $obj->message = "record updated";
+    return $obj ;
+  }else{
+    $obj->value = false;
+    $obj->message ="Something went wrong, please try again later." ;
+    return $obj ;
+  } 
+}
+
 public function changePassword($oldpass, $newpass){
   $id=$this->session->userData->data['id'];
   if($this->session->userData->data['accesslevel']==1){
@@ -202,6 +251,19 @@ if($query){
   $obj->message ="Incorrect old password" ;
   return $obj ;
 }
+}
+
+public function getUserDetails($id){
+  $query = $this->db->query("select * from user where id=$id")->row();
+  if($query){
+    $obj->value = true;
+    $obj->data =$query ;
+    return $obj ;
+  }else{
+    $obj->value = false;
+    $obj->message ="Something went wrong, please try again later." ;
+    return $obj ;
+  }
 }
 
 }

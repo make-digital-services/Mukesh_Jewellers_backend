@@ -53,6 +53,43 @@ class Api extends REST_Controller{
             $result = $this->user_model->submitContact($name,$email,$phone,$subject,$message);
             $this->response($result, 200);      
        }
+
+
+      //submit pd
+      public function savePd_post(){
+        $params = json_decode(file_get_contents('php://input'), TRUE);
+            $name= $params['name'];
+            $email=$params['email'];     
+            $phone=$params['phone'];       
+            $gender=$params['gender']; 
+            $id=$this->session->userData->data['id'];       
+            $result = $this->user_model->savePd($id,$name,$email,$phone,$gender);
+            $this->response($result, 200);      
+       }
+
+       //submit billing details
+       public function updateBilling_post(){
+        $params = json_decode(file_get_contents('php://input'), TRUE);
+            $billingaddress= $params['billingaddress'];
+            $billingpincode=$params['billingpincode'];     
+            $billingcity=$params['billingcity'];       
+            $billingstate=$params['billingstate']; 
+            $id=$this->session->userData->data['id'];      
+            $result = $this->user_model->updateBilling($id,$billingaddress,$billingpincode,$billingcity,$billingstate);
+            $this->response($result, 200);      
+       }
+
+       //submit shipping details
+       public function updateShipping_post(){
+        $params = json_decode(file_get_contents('php://input'), TRUE);
+            $shippingaddress= $params['shippingaddress'];
+            $shippingpincode=$params['shippingpincode'];     
+            $shippingcity=$params['shippingcity'];       
+            $shippingstate=$params['shippingstate']; 
+            $id=$this->session->userData->data['id'];      
+            $result = $this->user_model->updateShipping($id,$shippingaddress,$shippingpincode,$shippingcity,$shippingstate);
+            $this->response($result, 200);      
+       }
     
 
     //user login
@@ -79,7 +116,9 @@ class Api extends REST_Controller{
     function getUserDetails_get(){
         $obj = new stdClass();
         if($this->session->userData){
-         $result = $this->session->userData;
+        //  $result = $this->session->userData;
+        $id=$this->session->userData->data['id'];   
+        $result = $this->user_model->getUserDetails($id);
          $this->response($result, 200); 
         }else{
         $obj->value=false;
