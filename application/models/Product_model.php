@@ -82,5 +82,21 @@ $products_list .= '</ul></div>';
         }
        }
 
+
+
+       public function getAllProductAdmin(){
+        $query = $this->db->query("select * from product");
+        $obj = new stdClass();
+        if (!$query){
+          $obj->value = false;
+         $obj->message ="Data not found" ;
+          return $obj ;
+           }else{
+          $obj->value = true;
+          $obj->data = $query->result_array();
+          return $obj ;
+        }
+       }
+
 }
 ?>

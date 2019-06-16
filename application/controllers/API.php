@@ -1,16 +1,16 @@
 <?php
 
 $http_origin = $_SERVER['HTTP_ORIGIN'];
-// header("Access-Control-Allow-Origin:  $http_origin");
+header("Access-Control-Allow-Origin:  $http_origin");
 // array holding allowed Origin domains
-if ($http_origin == "http://192.168.0.35" ||
-    $http_origin == "http://localhost" ||
-    $http_origin == "http://192.168.0.25" ||
-    $http_origin == "http://www.server4.com")
-{
-    header("Access-Control-Allow-Origin: $http_origin");
-}
-// header('Access-Control-Allow-Origin: *');
+// if ($http_origin == "http://192.168.0.32" ||
+//     $http_origin == "http://localhost:6500" ||
+//     $http_origin == "http://192.168.0.25" ||
+//     $http_origin == "http://www.server4.com")
+// {
+//     header("Access-Control-Allow-Origin: $http_origin");
+// }
+//  header('Access-Control-Allow-Origin: *');
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Max-Age: 86400');
@@ -289,30 +289,29 @@ public function addToCart_post(){
    function submitOrder_post(){
     $params = json_decode(file_get_contents('php://input'), TRUE);
     $data = array(
-        'user_id'=>$this->session->userData->data['id'],
-        'first_name'=>$params['first_name'],
-        'last_name'=>$params['last_name'],
+        'user'=>$this->session->userData->data['id'],
+        'name'=>$params['name'],
         'email'=>$params['email'],
-        'billing_name'=>$params['billing_name'],
-        'billing_address'=>$params['billing_address'],
-        'billing_contact'=>$params['billing_contact'],
-        'billing_city'=>$params['billing_city'],
-        'billing_state'=>$params['billing_state'],
-        'billing_pincode'=>$params['billing_pincode'],
-        'billing_country'=>$params['billing_country'],
-        'shipping_city'=>$params['shipping_city'],
-        'shipping_address'=>$params['shipping_address'],
-        'shipping_name'=>$params['shipping_name'],
-        'shipping_country'=>$params['shipping_country'],
-        'shipping_contact'=>$params['shipping_contact'],
-        'shipping_state'=>$params['shipping_state'],
-        'shipping_pincode'=>$params['shipping_pincode'],
-        'tracking_code'=>$params['tracking_code'],
-        'default_currency'=>$params['default_currency'],
-        'shipping_method'=>$params['shipping_method'],
+        'billingname'=>$params['billingname'],
+        'billingaddress'=>$params['billingaddress'],
+        'billingcontact'=>$params['billingcontact'],
+        'billingcity'=>$params['billingcity'],
+        'billingstate'=>$params['billingstate'],
+        'billingpincode'=>$params['billingpincode'],
+        'billingcountry'=>$params['billingcountry'],
+        'shippingcity'=>$params['shippingcity'],
+        'shippingaddress'=>$params['shippingaddress'],
+        'shippingname'=>$params['shippingname'],
+        'shippingcountry'=>$params['shippingcountry'],
+        'shippingcontact'=>$params['shippingcontact'],
+        'shippingstate'=>$params['shippingstate'],
+        'shippingpincode'=>$params['shippingpincode'],
+        'trackingcode'=>$params['trackingcode'],
+        'currency'=>1,
+        'shippingmethod'=>$params['shippingmethod'],
         'orderstatus'=>$params['orderstatus'],
-        'paymentmode'=>$params['paymentmode'],
-        'transaction_id'=>$params['transaction_id']  
+        'paymentmethod'=>$params['paymentmethod'],
+        // 'transactionid'=>$params['transactionid']  
     );
     $obj = new stdClass();
     // if($this->session->userData){
@@ -352,6 +351,99 @@ function deleteOrder_get(){
     $this->response($result, 200); 
     }
   #------------------------------ Order End -------------------------------#   
+
+
+
+        #------------------------------ category Start ------------------------# 
+  //get all category
+function getAllCategory_get(){
+    $result=$this->category_model->getAllCategory();
+    $this->response($result,200);
+}
+
+
+// add create category
+function createCategory_post(){
+    
+    // if (!is_dir('uploads11/')) {
+    //     mkdir('./uploads11/', 0777, TRUE);
+    $config['upload_path'] = './uploads/';
+    $config['allowed_types'] = 'gif|jpg|png';
+    $this->load->library('upload', $config);
+    $filename = 'image';
+    $image = '';  
+     //get input as form-data
+    if ($this->upload->do_upload($filename)) {
+        $uploaddata = $this->upload->data();
+        $image =$uploaddata['file_name'];
+     }
+// }
+      $data = array(
+      'name'=>$this->input->get_post('name'),
+      'description'=>$this->input->get_post('description'),
+      'user'=>$this->session->userData->data['id'],
+      'order'=>$this->input->get_post('order'),
+      'status'=>$this->input->get_post('status'),
+      'banner_image'=>$image
+    //   'image_name'=>$this->config->item('imageServer').$image
+  );
+  $id =$this->input->get_post('id');
+  $obj = new stdClass();
+  if($this->session->userData){
+       if($this->session->userData->data['accesslevel']=='1'){
+           if($id){
+               $result = $this->category_model->updateCategory($data,$id);
+           }else{
+               $result = $this->category_model->createCategory($data);
+           }
+        $this->response($result, 200); 
+      }else{
+        $obj->value = false;
+        $obj->message ="Operation not Permitted. You dont have rights to this call" ;
+        $this->response($obj, 200); 
+      }
+    
+  }else{
+    $obj->value = false;
+    $obj->message ="Please Login to continue" ;
+    $this->response($obj, 200); 
+  }
+  
+}
+  
+
+ //get category  by Id 
+function getCategoryById_get(){
+    $lang=$this->session->lang;
+    $id=$this->get('id');
+    $result=$this->category_model->getCategoryById($lang,$id);
+    $this->response($result,200);
+}
+
+//read all products by passing category name
+function getCategoryDetailsByName_get(){
+    $lang=$this->session->lang;
+    $name=$this->get('name');
+    $result=$this->category_model->getCategoryDetailsByName($lang,$name);
+    $this->response($result,200);
+}
+
+//delete category
+function deleteCategory_get(){
+    $id=  $this->get('id');
+    $result = $this->category_model->deleteCategory($id);
+    $this->response($result, 200); 
+    }
+#-----------------------------Category End----------------------#
+
+
+#------------------------------ Product Start Admin----------------------------# 
+function getAllProductAdmin_get(){
+  
+    $result = $this->product_model->getAllProductAdmin();
+    $this->response($result, 200); 
+}
+ #------------------------------ Product End -----------------------------------#
 
 
 }

@@ -11,7 +11,7 @@ public function submitOrder($data){
  $obj = new stdClass();
   $checkCartItems = $this->order_model->checkCartItems($data['user_id']);
   if($checkCartItems->value){
-  $query= $this->db->insert('orders',$data);
+  $query= $this->db->insert('order',$data);
   $orderId=$this->db->insert_id();
   if(!$query){
     $obj->value = false;
