@@ -188,12 +188,7 @@ function deleteWatchlist_post(){
 #------------------------------ Wishlist End ----------------------------# 
 
 
-#------------------------------ Navigation Start ----------------------------# 
-function getNavigation_get(){
-    $result = $this->home_model->getNavigation();
-    $this->response(json_decode(json_encode($result, JSON_NUMERIC_CHECK)), 200); 
-}
- #------------------------------ Navigation End -----------------------------------#
+
 
 
 #------------------------------ Product Start ----------------------------# 
@@ -503,6 +498,12 @@ function createProduct_post(){
     $this->response($result, 200);  
   }
 
+//delete product 
+  function deleteProduct_get(){
+    $id=  $this->get('id');
+    $result = $this->product_model->deleteProduct($id);
+    $this->response($result, 200);  
+  }
 //delete product image
   function deleteProductImage_get(){
     $id=  $this->get('id');
@@ -511,5 +512,25 @@ function createProduct_post(){
   }
  #------------------------------ Product End -----------------------------------#
 
+#------------------------------ Navigation Start ----------------------------# 
+function getNavigation_get(){
+    $result = $this->home_model->getNavigation();
+    $this->response(json_decode(json_encode($result, JSON_NUMERIC_CHECK)), 200); 
+}
+ #------------------------------ Navigation End -----------------------------------#
+
+
+#------------------------------ Contact Start ----------------------------# 
+function getContact_get(){
+    $result = $this->home_model->getContact();
+    $this->response(json_decode(json_encode($result, JSON_NUMERIC_CHECK)), 200); 
+}
+
+function deleteContact_get(){
+    $id=  $this->get('id');
+    $result = $this->home_model->deleteContact($id);
+    $this->response($result, 200);  
+  }
+ #------------------------------ Contact End -----------------------------------#
 
 }

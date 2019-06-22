@@ -203,6 +203,20 @@ public function updateProduct($data,$id){
     }
   }
 
+  public function deleteProduct($id){
+     $query= $this->db->query("delete from product where id=$id");
+      $obj = new stdClass();
+       if (!$query){
+         $obj->value = false;
+        $obj->message ="Deletion failed" ;
+         return $obj ;
+        }else{
+          $obj->value = true;
+         $obj->message =" Records deleted,1 row affected" ;
+         return $obj ;
+       }
+     }
+
   public function deleteProductImage($id){
     $imageQuery = $this->db->query("select * from product_image where id=$id")->row();
      $query= $this->db->query("delete from product_image where id=$id");
