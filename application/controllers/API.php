@@ -443,6 +443,72 @@ function getAllProductAdmin_get(){
     $result = $this->product_model->getAllProductAdmin();
     $this->response($result, 200); 
 }
+
+
+// add product
+function createProduct_post(){
+    $image = array();
+    $ImageCount = count($_FILES['image_name']['name']);
+              for($i = 0; $i < $ImageCount; $i++){
+              $_FILES['file']['name']       = $_FILES['image_name']['name'][$i];
+              $_FILES['file']['type']       = $_FILES['image_name']['type'][$i];
+              $_FILES['file']['tmp_name']   = $_FILES['image_name']['tmp_name'][$i];
+              $_FILES['file']['error']      = $_FILES['image_name']['error'][$i];
+              $_FILES['file']['size']       = $_FILES['image_name']['size'][$i];
+              // File upload configuration
+             $config['upload_path'] = './uploads/';
+              $config['allowed_types'] = 'jpg|jpeg|png|gif';
+              // Load and initialize upload library
+              $this->load->library('upload', $config);
+              $this->upload->initialize($config);
+              // Upload file to server
+              if($this->upload->do_upload('file')){
+                  // Uploaded file data
+                  $imageData = $this->upload->data();
+                   $uploadImgData[$i]['image_name'] = $imageData['file_name'];
+                //    $uploadImgData[$i]['image_name'] = $this->config->item('imageServer').$imageData['file_name'];
+                }
+         }
+         $id =$this->input->get_post('id');
+            $data = array(
+        'name'=>$this->input->get_post('name'),
+        'category'=>$this->input->get_post('category'),
+        'description'=>$this->input->get_post('description'),
+        'size'=>$this->input->get_post('size'),
+        'price'=>$this->input->get_post('price'),
+        'discount'=>$this->input->get_post('discount'),
+        'final_price'=>$this->input->get_post('final_price'),
+        'realated'=>$this->input->get_post('realated'),
+        'quantity'=>$this->input->get_post('quantity'),
+        'metatitle'=>$this->input->get_post('metatitle'),
+        'metadesc'=>$this->input->get_post('metadesc'),
+        'metakeyword'=>$this->input->get_post('metakeyword'),
+        'date'=>$this->input->get_post('date'),
+        'status'=>$this->input->get_post('status'),
+        'order'=>$this->input->get_post('order')?$this->input->get_post('order'):0,
+        'user'=>$this->session->userData->data['id']   ,
+        'images'=>$uploadImgData
+    );
+   if($id){
+   $result = $this->product_model->updateProduct($data, $id);
+    }else{
+    $result = $this->product_model->createProduct($data);
+   }
+     $this->response($result, 200); 
+  }
+
+  function getProductById_get(){
+    $id=  $this->get('id');
+    $result = $this->product_model->getProductById($id);
+    $this->response($result, 200);  
+  }
+
+//delete product image
+  function deleteProductImage_get(){
+    $id=  $this->get('id');
+    $result = $this->product_model->deleteProductImage($id);
+    $this->response($result, 200);  
+  }
  #------------------------------ Product End -----------------------------------#
 
 
