@@ -18,6 +18,20 @@ public function getAllUsers(){
      return $obj ;
    }
 }
+public function getSubscribe(){
+    $query = $this->db->query('select * FROM `newsletter` order by id desc');
+    $obj = new stdClass();
+   if($query->num_rows() > 0){
+     $obj->value = true;
+     $obj->data = $query->result_array();
+     return $obj ;
+   }else{
+     $obj->value = false;
+     $obj->data = [];
+     $obj->message ="Records not found" ;
+     return $obj ;
+   }
+}
 
 public function login($username, $password){
        $query = $this->db->query("select `id`, `name`, `email`, `phone`, `accesslevel`, `status`, `billingaddress`, `billingcity`, `billingstate`, `billingcountry`, `shippingaddress`, `shippingcity`, `shippingcountry`, `shippingstate`, `shippingpincode`, `currency`, `companyname`, `companyregistrationno`, `vatnumber`, `country`, `fax`, `image`, `socialid`, `logintype`, `dob`, `street`, `address`, `city`, `state`, `pincode`, `facebook`, `google`, `twitter`, `timestamp`, `username`, `gender`, `billingpincode` FROM `user` WHERE  username='$username' and password='$password'");
@@ -122,6 +136,30 @@ $obj->value = false;
  return $obj ;
  }
   
+}
+
+public function submitSubscribe($email){
+  // if (valid_email($email)){
+$checkSub = $this->db->query("select * from newsletter where email='$email'");
+echo $query->num_rows();
+$query = $this->db->query("insert into newsletter(email) values($email)");
+  $obj = new stdClass();
+  if($query){
+    $obj->value = true;
+    $obj->message = "Thank You. Please check your inbox to confirm your email address";
+    return $obj ;
+  }else{
+    $obj->value = false;
+    $obj->message ="Something went wrong, please try again later." ;
+    return $obj ;
+  } 
+  // }
+  // else{
+  //   $obj->value = false;
+  //   $obj->field = "email";
+  //   $obj->message ="Please enter valid Email Address." ;
+  //   return $obj ;
+  // }
 }
 
 

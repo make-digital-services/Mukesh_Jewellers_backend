@@ -280,6 +280,21 @@ public function addToCart_post(){
 
 
         #------------------------------ Order Start ------------------------# 
+
+#------------------------------ Product Start ----------------------------# 
+function getAllOrders_get(){
+    $result = $this->order_model->getAllOrders();
+    $this->response($result, 200); 
+}
+ #------------------------------ Product End -----------------------------------#
+ function updateOrderStatus_post(){
+    $params = json_decode(file_get_contents('php://input'), TRUE); 
+    $id=$params['id'];
+    $orderstatus=$params['orderstatus'];
+    $result = $this->order_model->updateOrderStatus($orderstatus,$id);
+    $this->response($result, 200); 
+   }
+
    //submit order
    function submitOrder_post(){
     $params = json_decode(file_get_contents('php://input'), TRUE);
@@ -532,5 +547,27 @@ function deleteContact_get(){
     $this->response($result, 200);  
   }
  #------------------------------ Contact End -----------------------------------#
+
+
+#------------------------------ Subscribe Start ----------------------------# 
+function getSubscribe_get(){
+    $result = $this->user_model->getSubscribe();
+    $this->response(json_decode(json_encode($result, JSON_NUMERIC_CHECK)), 200); 
+}
+
+    public function submitSubscribe_post(){
+        $params = json_decode(file_get_contents('php://input'), TRUE);
+              $email=$params['email'];     
+              $result = $this->user_model->submitSubscribe($email);
+            $this->response($result, 200);      
+       }
+
+
+function deleteSubscribe_get(){
+    $id=  $this->get('id');
+    $result = $this->home_model->deleteSubscribe($id);
+    $this->response($result, 200);  
+  }
+ #------------------------------ Subscribe End -----------------------------------#
 
 }

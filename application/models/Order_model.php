@@ -170,7 +170,23 @@ public function createOrder($data){
       return $obj ;
     }
   }
-  public function getOrderbyUserId($user_id){
+
+  public function getAllOrders(){
+          $query=$this->db->query("select * from  `order` order by id desc");
+            $obj = new stdClass();
+       if($query->num_rows() > 0){
+         $obj->value = true;
+         $obj->data = $query->result_array();
+         return $obj ;
+       }else{
+         $obj->value = false;
+         $obj->data = [];
+         $obj->message ="Records not found on your specific input" ;
+         return $obj ;
+       }
+     }
+ 
+     public function getOrderbyUserId($user_id){
           $query=$this->db->query("select * from  `order` where user=$user_id order by id desc");
             $obj = new stdClass();
        if($query->num_rows() > 0){
@@ -184,6 +200,7 @@ public function createOrder($data){
          return $obj ;
        }
      }
+ 
      public function getOrderbyId($id){
       $query=$this->db->query("select * from  `order` where id=$id");
       $obj = new stdClass();
@@ -216,7 +233,7 @@ public function createOrder($data){
  }
 
    public function deleteOrder($id){
-    $query= $this->db->query("delete from orders where id=$id");
+    $query= $this->db->query("delete from order where id=$id");
     $obj = new stdClass();
      if ($this->db->affected_rows() != 1){
        $obj->value = false;
@@ -231,6 +248,30 @@ public function createOrder($data){
    }
      
 
+   public function updateOrderStatus($orderstatus,$id){
+    $query = $this->db->query("update `order` set orderstatus=$orderstatus where id=$id");
+   $obj = new stdClass();
+   if (!$query){
+     $obj->value = false;
+    $obj->message ="Updation failed" ;
+     return $obj ;
+ 
+   }else{
+     if($orderstatus==3){
+       $orderdata['data']=$this->order_model->getOrderbyId($id)->data;
+       $viewcontent = $this->load->view('emailers/ordershipped', $orderdata, true);
+       $this->email_model->emailer($viewcontent,'Order Dispatched - Mukesh Jewellers','makedigitaldesigners@gmail.com',"Vinod");
+     }
+     if($orderstatus==5){
+       $orderdata['data']=$this->order_model->getOrderbyId($id)->data;
+       $viewcontent = $this->load->view('emailers/oredercancel', $orderdata, true);
+       $this->email_model->emailer($viewcontent,'Order Cancelled - Mukesh Jewellers','makedigitaldesigners@gmail.com',"Vinod");
+     }
+     $obj->value = true;
+     $obj->message ="Record updated" ;
+     return $obj ;
+   }
+ }
 
     }
     ?>
